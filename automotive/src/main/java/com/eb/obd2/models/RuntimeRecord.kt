@@ -13,6 +13,11 @@ interface RuntimeRecord {
     val time: LocalDateTime
 
     /**
+     * Converts the record to a [Map] for Firestore.
+     */
+    fun toMap(): Map<String, Any>
+
+    /**
      * @param command The command of the record. `OBD_Hex` reserved by obd service 1 data,
      * @param value The OBD standard value
      * @param unit The OBD standard unit of the value
@@ -23,7 +28,16 @@ interface RuntimeRecord {
         override val value: String,
         override val unit: String,
         override val time: LocalDateTime
-    ) : RuntimeRecord
+    ) : RuntimeRecord {
+        override fun toMap(): Map<String, Any> {
+            return mapOf(
+                "command" to command,
+                "value" to value,
+                "unit" to unit,
+                "time" to time.toString()
+            )
+        }
+    }
 
     /**
      * @param speed The speed of the record in SI unit
@@ -40,5 +54,17 @@ interface RuntimeRecord {
         override val value: String,
         override val unit: String,
         override val time: LocalDateTime
-    ) : RuntimeRecord
+    ) : RuntimeRecord {
+        override fun toMap(): Map<String, Any> {
+            return mapOf(
+                "speed" to speed,
+                "acceleration" to acceleration,
+                "deltaTime" to deltaTime,
+                "value" to value,
+                "unit" to unit,
+                "time" to time.toString()
+            )
+        }
+    }
+
 }

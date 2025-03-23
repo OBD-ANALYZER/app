@@ -5,6 +5,7 @@ import androidx.room.Room
 import com.eb.obd2.repositories.source.persistent.RecordDao
 import com.eb.obd2.repositories.source.persistent.SpeedDao
 import com.eb.obd2.services.DatabaseService
+import com.eb.obd2.services.FirebaseService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -15,6 +16,11 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object DatabaseServiceModule {
+    @Provides
+    @Singleton
+    fun provideFirebaseService(): FirebaseService {
+        return FirebaseService()
+    }
 
     @Provides
     @Singleton

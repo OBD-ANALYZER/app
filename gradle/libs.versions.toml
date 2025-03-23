@@ -7,6 +7,8 @@ androidx-hilt-compose = "1.2.0"
 androidx-lifecycle = "2.8.1"
 androidx-test-espresso = "3.5.1"
 androidx-test-ext-junit = "1.1.5"
+firebase-bom = "32.7.0"
+google-services = "4.3.15"
 hilt = "2.50"
 junit = "4.13.2"
 kotlin = "2.0.0"
@@ -35,10 +37,16 @@ room-compiler = { group = "androidx.room", name = "room-compiler", version.ref =
 room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
 room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 vico-compose = { group = "com.patrykandpatrick.vico", name = "compose", version.ref = "vico" }
-
+firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebase-bom" }
+firebase-auth = { module = "com.google.firebase:firebase-auth" }
+firebase-firestore = { module = "com.google.firebase:firebase-firestore" }
+firebase-database = { module = "com.google.firebase:firebase-database" }
+firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
+google-services = { module = "com.google.gms:google-services", version.ref = "google-services" }
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
 compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+google-services = { id = "com.google.gms.google-services", version.ref = "google-services" }
