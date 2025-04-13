@@ -1,10 +1,12 @@
 package com.eb.obd2.repositories
 
+import com.eb.obd2.models.FirestoreRecord
 import com.eb.obd2.models.RuntimeRecord
 import com.eb.obd2.repositories.source.persistent.RecordDao
 import com.eb.obd2.repositories.source.persistent.RecordEntity
 import com.eb.obd2.repositories.source.persistent.SpeedDao
 import com.eb.obd2.repositories.source.persistent.SpeedEntity
+import com.google.firebase.firestore.FirebaseFirestore
 import java.time.Duration
 import java.time.LocalDateTime
 import javax.inject.Inject
@@ -13,6 +15,8 @@ class RecordRepository @Inject constructor(
     private val recordDao: RecordDao,
     private val speedDao: SpeedDao,
 ) {
+    // Firestore instance
+    private val firestore = FirebaseFirestore.getInstance()
 
     suspend fun getRecords(
         start: LocalDateTime,
@@ -44,6 +48,22 @@ class RecordRepository @Inject constructor(
                 time = record.time
             )
         )
+        // Insert into Firestore
+        val firestoreRecord = FirestoreRecord(
+            recordId = entityId,
+            time = record.time.toString(), // Store time as String
+            speed = record.value.toFloatOrNull() ?: 0f // Use value from record (convert if necessary)
+        )
+
+        firestore.collection("records")
+            .document(entityId.toString())  // Use recordId as the document ID
+            .set(firestoreRecord)
+            .addOnSuccessListener {
+                // Handle success, maybe log or notify user
+            }
+            .addOnFailureListener {
+                // Handle failure, show error message
+            }
 
         when(record.command) {
             "0D" -> {
@@ -80,5 +100,19 @@ class RecordRepository @Inject constructor(
             unit = record.unit,
             time = record.time
         )
+    }
+    // Helper function to sync records from Firestore (optional)
+    fun getRecordsFromFirestore(onResult: (List<FirestoreRecord>) -> Unit) {
+        firestore.collection("records")
+            .get()
+            .addOnSuccessListener { documents ->
+                val records = documents.map { document ->
+                    document.toObject(FirestoreRecord::class.java)
+                }
+                onResult(records)  // Return the records to the caller
+            }
+            .addOnFailureListener {
+                // Handle Firestore error
+            }
     }
 }

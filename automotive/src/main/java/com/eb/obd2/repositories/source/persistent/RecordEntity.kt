@@ -19,5 +19,5 @@ data class RecordEntity(
     val command: String,
     val value: String,
     val unit: String,
-    val time: LocalDateTime
+    val time: LocalDateTime,
 )
