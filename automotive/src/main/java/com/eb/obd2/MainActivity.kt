@@ -20,7 +20,6 @@ class MainActivity : ComponentActivity() {
         FirebaseApp.initializeApp(this)
         Log.d("Firebase", "Firebase initialized successfully!")
 
-
         setContent {
             AppTheme {
                 Surface(

@@ -15,7 +15,6 @@ import com.patrykandpatrick.vico.compose.cartesian.rememberCartesianChart
 import com.patrykandpatrick.vico.compose.common.component.rememberLayeredComponent
 import com.patrykandpatrick.vico.compose.common.component.rememberShapeComponent
 import com.patrykandpatrick.vico.compose.common.component.rememberTextComponent
-import com.patrykandpatrick.vico.compose.common.of
 import com.patrykandpatrick.vico.compose.common.shape.markerCornered
 import com.patrykandpatrick.vico.core.cartesian.data.CartesianChartModelProducer
 import com.patrykandpatrick.vico.core.cartesian.data.lineSeries
@@ -29,57 +28,41 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import kotlin.random.Random
 
+// Create a simple marker
 @Composable
-fun ScoreGraph(modelProducer: CartesianChartModelProducer) {
-    CartesianChartHost(
-        chart =
-            rememberCartesianChart(
-                rememberLineCartesianLayer(),
-                startAxis = rememberStartAxis(),
-                bottomAxis = rememberBottomAxis(guideline = null),
-            ),
-        modelProducer = modelProducer,
-        marker = rememberMarker(),
+fun createSimpleMarker(): CartesianMarker {
+    val labelBackground = rememberShapeComponent(
+        shape = Shape.markerCornered(Corner.FullyRounded),
+        color = MaterialTheme.colorScheme.surface
     )
-}
-
-@Composable
-internal fun rememberMarker(
-    labelPosition: DefaultCartesianMarker.LabelPosition = DefaultCartesianMarker.LabelPosition.Top,
-    showIndicator: Boolean = true,
-): CartesianMarker {
-    val labelBackgroundShape = Shape.markerCornered(Corner.FullyRounded)
-    val labelBackground = rememberShapeComponent(labelBackgroundShape, MaterialTheme.colorScheme.surface)
+    
     val label = rememberTextComponent(
         color = MaterialTheme.colorScheme.onSurface,
         background = labelBackground,
-        padding = Dimensions.of(8.dp, 4.dp)
+        padding = Dimensions(8.dp.value, 4.dp.value, 8.dp.value, 4.dp.value)
     )
-
-    val indicatorFrontComponent = rememberShapeComponent(Shape.Pill, MaterialTheme.colorScheme.surface)
-    val indicatorCenterComponent = rememberShapeComponent(Shape.Pill)
-    val indicatorRearComponent = rememberShapeComponent(Shape.Pill)
-    val indicator =
-        rememberLayeredComponent(
-            rear = indicatorRearComponent,
-            front = rememberLayeredComponent(
-                rear = indicatorCenterComponent,
-                front = indicatorFrontComponent,
-                padding = Dimensions.of(5.dp),
-            ),
-            padding = Dimensions.of(10.dp),
-        )
-
+    
     val guideline = rememberAxisGuidelineComponent()
-
-    return remember(label, labelPosition, indicator, showIndicator, guideline) {
+    
+    return remember(label, guideline) {
         DefaultCartesianMarker(
             label = label,
-            labelPosition = labelPosition,
-            indicator = if (showIndicator) indicator else null,
             guideline = guideline
         )
     }
+}
+
+@Composable
+fun ScoreGraph(modelProducer: CartesianChartModelProducer) {
+    CartesianChartHost(
+        chart = rememberCartesianChart(
+            rememberLineCartesianLayer(),
+            startAxis = rememberStartAxis(),
+            bottomAxis = rememberBottomAxis(guideline = null),
+        ),
+        modelProducer = modelProducer,
+        marker = createSimpleMarker()
+    )
 }
 
 @Preview(showBackground = true)

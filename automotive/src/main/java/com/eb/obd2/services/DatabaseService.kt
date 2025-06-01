@@ -11,7 +11,7 @@ import com.eb.obd2.repositories.source.persistent.SpeedEntity
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-@Database(entities = [RecordEntity::class, SpeedEntity::class], version = 1)
+@Database(entities = [RecordEntity::class, SpeedEntity::class], version = 1, exportSchema = false)
 @TypeConverters(DatabaseService.Converters::class)
 abstract class DatabaseService : RoomDatabase() {
 

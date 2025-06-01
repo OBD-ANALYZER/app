@@ -1,9 +1,10 @@
 package com.eb.obd2.modules
 
 import android.content.Context
-import com.eb.obd2.services.OBDConnectionFactory
-import com.eb.obd2.services.OBDConnectionType
+import com.eb.obd2.repositories.RecordRepository
+import com.eb.obd2.services.OBDConnection
 import com.eb.obd2.services.OBDService
+import com.eb.obd2.services.TCPOBDConnection
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -17,14 +18,16 @@ object OBDServiceModule {
 
     @Provides
     @Singleton
-    fun provideOBDConnectionFactory(@ApplicationContext context: Context): OBDConnectionFactory {
-        return OBDConnectionFactory(context)
+    fun provideTCPOBDConnection(): OBDConnection {
+        return TCPOBDConnection()
     }
 
     @Provides
     @Singleton
-    fun provideOBDService(factory: OBDConnectionFactory): OBDService {
-        val initialConnection = factory.create(OBDConnectionType.TCP)
-        return OBDService(initialConnection)
+    fun provideOBDService(
+        connection: OBDConnection,
+        repository: RecordRepository
+    ): OBDService {
+        return OBDService(connection, repository)
     }
 }

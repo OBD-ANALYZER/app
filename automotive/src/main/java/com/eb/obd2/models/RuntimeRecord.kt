@@ -11,6 +11,10 @@ interface RuntimeRecord {
 
     /** The time of the record */
     val time: LocalDateTime
+    
+    /** The raw value of the record for data recording */
+    val rawValue: String
+        get() = value  // Default implementation returns value
 
     /**
      * Converts the record to a [Map] for Firestore.
@@ -29,6 +33,9 @@ interface RuntimeRecord {
         override val unit: String,
         override val time: LocalDateTime
     ) : RuntimeRecord {
+        override val rawValue: String
+            get() = value
+
         override fun toMap(): Map<String, Any> {
             return mapOf(
                 "command" to command,
@@ -55,6 +62,9 @@ interface RuntimeRecord {
         override val unit: String,
         override val time: LocalDateTime
     ) : RuntimeRecord {
+        override val rawValue: String
+            get() = value
+            
         override fun toMap(): Map<String, Any> {
             return mapOf(
                 "speed" to speed,
@@ -66,5 +76,4 @@ interface RuntimeRecord {
             )
         }
     }
-
 }

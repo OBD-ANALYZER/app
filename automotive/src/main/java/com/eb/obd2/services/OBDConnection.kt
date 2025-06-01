@@ -9,12 +9,23 @@ interface OBDConnection {
     fun setup(context: Context) {}
 
     /** Start the connection */
-    fun openConnection()
+    suspend fun openConnection()
 
-    /** Open the connection */
-    fun closeConnection()
+    /** Close the connection */
+    suspend fun closeConnection()
 
+    /** Send a command */
+    suspend fun sendCommand(command: String)
+
+    /** Read response */
+    suspend fun readResponse(): String?
+
+    /** Check if the connection is established */
+    fun isConnected(): Boolean
+
+    /** Get input stream */
     val inputStream: InputStream
 
+    /** Get output stream */
     val outputStream: OutputStream
 }
